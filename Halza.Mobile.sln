@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Halza.Mobile", "Halza.Mobile\Halza.Mobile.csproj", "{862A1C89-558A-419E-B0E2-462A23146DCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosStorageSDK.Module", "CosmosStorageSDK.Module\CosmosStorageSDK.Module\CosmosStorageSDK.Module.csproj", "{65FED596-3909-44D3-BDE4-7B83396D3754}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A3A79C02-82B4-4872-962C-31DB1652E0BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Halza-1-Debug|Any CPU = Halza-1-Debug|Any CPU
+		Halza-1-Release|Any CPU = Halza-1-Release|Any CPU
+		Halza-2-Debug|Any CPU = Halza-2-Debug|Any CPU
+		Halza-2-Release|Any CPU = Halza-2-Release|Any CPU
+		Halza-Beta|Any CPU = Halza-Beta|Any CPU
+		Halza-Beta-Release|Any CPU = Halza-Beta-Release|Any CPU
+		Halza-QC-Debug|Any CPU = Halza-QC-Debug|Any CPU
+		Halza-QC-Release|Any CPU = Halza-QC-Release|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Debug|Any CPU.ActiveCfg = Halza-1-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Debug|Any CPU.Build.0 = Halza-1-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Debug|Any CPU.Deploy.0 = Halza-1-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Release|Any CPU.ActiveCfg = Halza-1-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Release|Any CPU.Build.0 = Halza-1-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-1-Release|Any CPU.Deploy.0 = Halza-1-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Debug|Any CPU.ActiveCfg = Halza-2-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Debug|Any CPU.Build.0 = Halza-2-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Debug|Any CPU.Deploy.0 = Halza-2-Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Release|Any CPU.ActiveCfg = Halza-2-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Release|Any CPU.Build.0 = Halza-2-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-2-Release|Any CPU.Deploy.0 = Halza-2-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta|Any CPU.ActiveCfg = Halza-Beta|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta|Any CPU.Build.0 = Halza-Beta|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta|Any CPU.Deploy.0 = Halza-Beta|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta-Release|Any CPU.ActiveCfg = Halza-Beta-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta-Release|Any CPU.Build.0 = Halza-Beta-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-Beta-Release|Any CPU.Deploy.0 = Halza-Beta-Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Release|Any CPU.Build.0 = Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Halza-QC-Release|Any CPU.Deploy.0 = Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862A1C89-558A-419E-B0E2-462A23146DCF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-1-Debug|Any CPU.ActiveCfg = Halza-1-Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-1-Debug|Any CPU.Build.0 = Halza-1-Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-1-Release|Any CPU.ActiveCfg = Halza-1-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-1-Release|Any CPU.Build.0 = Halza-1-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-2-Debug|Any CPU.ActiveCfg = Halza-2-Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-2-Debug|Any CPU.Build.0 = Halza-2-Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-2-Release|Any CPU.ActiveCfg = Halza-2-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-2-Release|Any CPU.Build.0 = Halza-2-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-Beta|Any CPU.ActiveCfg = Halza-Beta|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-Beta|Any CPU.Build.0 = Halza-Beta|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-Beta-Release|Any CPU.ActiveCfg = Halza-Beta-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-Beta-Release|Any CPU.Build.0 = Halza-Beta-Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-QC-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-QC-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-QC-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Halza-QC-Release|Any CPU.Build.0 = Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FED596-3909-44D3-BDE4-7B83396D3754}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65FED596-3909-44D3-BDE4-7B83396D3754} = {A3A79C02-82B4-4872-962C-31DB1652E0BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D12885D-A1ED-4272-A745-FC60F7AE6F62}
+	EndGlobalSection
+EndGlobal
