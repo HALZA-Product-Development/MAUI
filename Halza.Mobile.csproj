@@ -1,0 +1,926 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Configurations>Debug;Release;Halza-2-Debug;Halza-2-Release;Halza-1-Debug;Halza-1-Release;Halza-Beta;Halza-Beta-Release;Halza-QC-Debug;Halza-QC-Release</Configurations>
+		<TargetFrameworks>net8.0-ios;net8.0-android34.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+
+		<!-- Note for MacCatalyst:
+		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Halza.Mobile</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Display name -->
+		<ApplicationTitle>Halza.Mobile</ApplicationTitle>
+
+		
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+		
+		<InformationalVersion>1.0.0+build$([System.DateTime]::Now.ToString('yyyyMMdd'))</InformationalVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	</PropertyGroup>
+	<PropertyGroup>
+		<UseInterpreter Condition="$(TargetFramework.EndsWith('-ios'))">true</UseInterpreter>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU' ">
+  <AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifest.xml</AndroidManifest>
+		<DefineConstants>$(DefineConstants);Release</DefineConstants>
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk> 
+
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza</ApplicationId>
+		<PackageId>com.Halza</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-Beta-Release|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifest.xml</AndroidManifest>
+		<DefineConstants>HALZABETA</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza</ApplicationId>
+		<PackageId>com.Halza</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-1-Release|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifestPREPROD.xml</AndroidManifest>
+		<DefineConstants>HALZAPREPROD</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza.Slots</ApplicationId>
+		<PackageId>com.Halza.Slots</PackageId>
+		<AndroidLinkTool>r8</AndroidLinkTool>
+
+		</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-2-Release|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifestTEST.xml</AndroidManifest>
+		<DefineConstants>HALZATEST</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza.Master</ApplicationId>
+		<PackageId>com.Halza.Master</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifest.xml</AndroidManifest>
+		<DefineConstants>DEBUG;DEBUG,GORILLA </DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza</ApplicationId>
+		<PackageId>com.Halza</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-Beta|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifest.xml</AndroidManifest>
+		<DefineConstants>DEBUG;DEBUG,GORILLA,HALZABETA</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza</ApplicationId>
+		<PackageId>com.Halza</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-1-Debug|net8.0-android|AnyCPU'">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifestPREPROD.xml</AndroidManifest>
+		<DefineConstants>DEBUG;DEBUG,GORILLA,HALZAPREPROD</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza.Slots</ApplicationId>
+		<PackageId>com.Halza.Slots</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU' ">
+		<!--<EnableSGenConc>False</EnableSGenConc>
+		<MtouchProfiling>False</MtouchProfiling>
+		<MtouchLink>None</MtouchLink>-->
+		<CodesignKey>Apple Distribution: Halza Pte. Ltd. (D8XQ8RU998)</CodesignKey>
+		<CodesignProvision>HalzaProdMAUI</CodesignProvision>
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+		<NoSymbolStrip>true</NoSymbolStrip>
+
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+
+		</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU' ">
+		<!--<EnableSGenConc>False</EnableSGenConc>
+		<MtouchProfiling>False</MtouchProfiling>
+		<MtouchLink>None</MtouchLink>-->
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+
+		<MtouchUseLlvm>True</MtouchUseLlvm>
+
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)' == 'Debug|net8.0-ios|iPhoneSimulator' ">
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+
+	</PropertyGroup>
+
+		<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-1-Release|net8.0-ios|AnyCPU' ">
+		<!--<EnableSGenConc>False</EnableSGenConc>
+		<MtouchProfiling>False</MtouchProfiling>
+		<MtouchLink>None</MtouchLink>-->
+		<CodesignKey>Apple Distribution: Halza Pte. Ltd. (D8XQ8RU998)</CodesignKey>
+		<CodesignProvision>HalzaPreprodMAUI</CodesignProvision>
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+        <NoSymbolStrip>true</NoSymbolStrip>
+		<CodesignEntitlements>Platforms\iOS\Entitlements.preprod.plist</CodesignEntitlements>
+		<MtouchUseLlvm>False</MtouchUseLlvm>
+		<Optimize>True</Optimize>
+	
+	</PropertyGroup>
+
+		<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-2-Release|net8.0-ios|AnyCPU' ">
+		<!--<EnableSGenConc>False</EnableSGenConc>
+		<MtouchProfiling>False</MtouchProfiling>
+		<MtouchLink>None</MtouchLink>-->
+		<CodesignKey>Apple Distribution: Halza Pte. Ltd. (D8XQ8RU998)</CodesignKey>
+		<CodesignProvision>HalzaMasterMAUI</CodesignProvision>
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+         <NoSymbolStrip>true</NoSymbolStrip>
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+		<MtouchUseLlvm>False</MtouchUseLlvm>
+		<Optimize>True</Optimize>
+	
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)$(TargetFramework)|$(Platform)'=='Halza-2-Debug|net8.0-android|AnyCPU' ">
+		<AndroidManifest>Platforms\Android\$(Configuration)\AndroidManifestTEST.xml</AndroidManifest>
+		<DefineConstants>DEBUG;DEBUG,GORILLA,HALZATEST</DefineConstants>
+		<!-- App Identifier -->
+		<ApplicationId>com.Halza.Master</ApplicationId>
+		<PackageId>com.Halza.Master</PackageId>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(RunConfiguration)'=='Default' ">
+	  <LaunchForBackgroundFetch>false</LaunchForBackgroundFetch>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-2-Debug|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-1-Debug|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.preprod.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-Beta|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-Beta-Release|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-QC-Debug|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-QC-Release|net8.0-ios|AnyCPU'">
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+	  <AndroidLinkTool>r8</AndroidLinkTool>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-1-Release|net8.0-android34.0|AnyCPU'">
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+		<RunAOTCompilation>true</RunAOTCompilation>
+		<PublishTrimmed>true</PublishTrimmed>
+	  <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-2-Release|net8.0-android34.0|AnyCPU'">
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+		<RunAOTCompilation>true</RunAOTCompilation>
+		<PublishTrimmed>true</PublishTrimmed>
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU' ">
+		<MtouchExtraArgs>--optimize:-static-block-to-delegate-lookup</MtouchExtraArgs>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'" />
+	
+
+	
+	<ItemGroup>
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU' Or '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-Beta|net8.0-ios|AnyCPU'">
+		<None Include="Platforms\iOS\Info.plist">
+			<LogicalName>Info.plist</LogicalName>
+		</None>
+	</ItemGroup>
+
+
+	<ItemGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-1-Debug|net8.0-ios|AnyCPU' Or  '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-1-Release|net8.0-ios|AnyCPU'">
+		<None Include="Platforms\iOS\Info.plist">
+			<LogicalName>Info-PreProduction.plist</LogicalName>
+		</None>
+		
+	</ItemGroup>
+	<ItemGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-2-Debug|net8.0-ios|AnyCPU' Or '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-2-Release|net8.0-ios|AnyCPU' ">
+		<None Include="Platforms\iOS\Info.plist">
+			<LogicalName>Info-Test.plist</LogicalName>
+		</None>
+		
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU' Or  '$(Configuration)|$(TargetFramework)|$(Platform)'=='Halza-Beta-Release|net8.0-ios|AnyCPU'">
+	<!--	<None Remove="Platforms\iOS\Info.plist" />
+		<None Include="Platforms\iOS\Info.Debug.plist">-->
+		<None Include="Platforms\iOS\Info.plist">
+			<LogicalName>Info.plist</LogicalName>
+</None>
+	</ItemGroup>
+	<ItemGroup>
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+	</ItemGroup>
+	<ItemGroup>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Contents.json">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-152.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-20.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60@2x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60@3x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-76.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-83.5@2x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small-40.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small-40@2x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small-40@3x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small@2x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small@3x.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+		<ImageAsset Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\iTunesArtwork.png">
+			<Visible>false</Visible>
+		</ImageAsset>
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="Platforms\Android\AndroidManifest.xml" />
+		<None Remove="Platforms\Android\AndroidManifestPREPROD.xml" />
+		<None Remove="Platforms\Android\AndroidManifestTEST.xml" />
+	  <None Remove="Platforms\Android\xml\file_paths.xml" />
+	  <None Remove="Platforms\iOS\GoogleService-Info.plist" />
+	  <None Remove="Resources\AppIcon\appicon.svg" />
+	  <None Remove="Resources\Fonts\Android_New_03_Looping Beat_Halza.json" />
+	  <None Remove="Resources\Fonts\fontello.ttf" />
+	  <None Remove="Resources\Images\addfeedsbutton.png" />
+	  <None Remove="Resources\Images\alarm_light.png" />
+	  <None Remove="Resources\Images\appoints_dash.png" />
+	  <None Remove="Resources\Images\arrow_navigate.png" />
+	  <None Remove="Resources\Images\arrow_right.png" />
+	  <None Remove="Resources\Images\back.png" />
+	  <None Remove="Resources\Images\BigtileGray.png" />
+	  <None Remove="Resources\Images\BigtileOption.png" />
+	  <None Remove="Resources\Images\check.png" />
+	  <None Remove="Resources\Images\check_save.png" />
+	  <None Remove="Resources\Images\check_white.png" />
+	  <None Remove="Resources\Images\circle.png" />
+	  <None Remove="Resources\Images\closegreen.png" />
+	  <None Remove="Resources\Images\CloudStorageImage.png" />
+	  <None Remove="Resources\Images\collapse.png" />
+	  <None Remove="Resources\Images\DashBoardTopBackground.png" />
+	  <None Remove="Resources\Images\defaultAvatar.png" />
+	  <None Remove="Resources\Images\Dentalimage.png" />
+	  <None Remove="Resources\Images\document.png" />
+	  <None Remove="Resources\Images\emojiPlusButton.png" />
+	  <None Remove="Resources\Images\emptybox.png" />
+	  <None Remove="Resources\Images\EmptyStateImage.png" />
+	  <None Remove="Resources\Images\expand.png" />
+	  <None Remove="Resources\Images\Family.png" />
+	  <None Remove="Resources\Images\file_white.png" />
+	  <None Remove="Resources\Images\Friend_request_invite.png" />
+	  <None Remove="Resources\Images\GB_Icon.png" />
+	  <None Remove="Resources\Images\GreenTick.png" />
+	  <None Remove="Resources\Images\GreyCheckbox.png" />
+	  <None Remove="Resources\Images\gridoptiongray.png" />
+	  <None Remove="Resources\Images\gridoptionlistnew.png" />
+	  <None Remove="Resources\Images\hamburgericonblack.png" />
+	  <None Remove="Resources\Images\HeartRate.png" />
+	  <None Remove="Resources\Images\history_icon.png" />
+	  <None Remove="Resources\Images\icon.png" />
+	  <None Remove="Resources\Images\IntroHalzaIcon.png" />
+	  <None Remove="Resources\Images\intro_icon.png" />
+	  <None Remove="Resources\Images\IVFupgradeimage.png" />
+	  <None Remove="Resources\Images\ListviewGray.png" />
+	  <None Remove="Resources\Images\ListviewOption.png" />
+	  <None Remove="Resources\Images\lock.png" />
+	  <None Remove="Resources\Images\Logout.png" />
+	  <None Remove="Resources\Images\Mode.png" />
+	  <None Remove="Resources\Images\Mood.png" />
+	  <None Remove="Resources\Images\nurse.png" />
+	  <None Remove="Resources\Images\organ_transplant_radio_selected.png" />
+	  <None Remove="Resources\Images\PAdddoctor.png" />
+	  <None Remove="Resources\Images\PAddfriend.png" />
+	  <None Remove="Resources\Images\PAddmedicine.png" />
+	  <None Remove="Resources\Images\PAddrecord.png" />
+	  <None Remove="Resources\Images\PAddReminders.png" />
+	  <None Remove="Resources\Images\PAddVaccine.png" />
+	  <None Remove="Resources\Images\PCancel.png" />
+	  <None Remove="Resources\Images\PEdit.png" />
+	  <None Remove="Resources\Images\phone.png" />
+	  <None Remove="Resources\Images\pills.png" />
+	  <None Remove="Resources\Images\pills_icon.png" />
+	  <None Remove="Resources\Images\PL_CallDoctor.png" />
+	  <None Remove="Resources\Images\PL_ContractionTimer.png" />
+	  <None Remove="Resources\Images\PL_Labor.png" />
+	  <None Remove="Resources\Images\PPlus.png" />
+	  <None Remove="Resources\Images\PregancyImage.png" />
+	  <None Remove="Resources\Images\Pregnancyupgradeimage.png" />
+	  <None Remove="Resources\Images\private_icon.png" />
+	  <None Remove="Resources\Images\Profile.png" />
+	  <None Remove="Resources\Images\public_icon.png" />
+	  <None Remove="Resources\Images\push_pin.png" />
+	  <None Remove="Resources\Images\P_Journal.png" />
+	  <None Remove="Resources\Images\P_Mood_Tracker.png" />
+	  <None Remove="Resources\Images\P_Stopwatch_Timer.png" />
+	  <None Remove="Resources\Images\P_Symptoms.png" />
+	  <None Remove="Resources\Images\qr_image_new.png" />
+	  <None Remove="Resources\Images\qr_scanner_img.png" />
+	  <None Remove="Resources\Images\RecordsCloudSetUp.png" />
+	  <None Remove="Resources\Images\select_image.png" />
+	  <None Remove="Resources\Images\settingsimage.png" />
+	  <None Remove="Resources\Images\subscriptionfamily.png" />
+	  <None Remove="Resources\Images\subscriptionRecords.png" />
+	  <None Remove="Resources\Images\subscription_bg.png" />
+	  <None Remove="Resources\Images\success_tick.jpg" />
+	  <None Remove="Resources\Images\switchoff.png" />
+	  <None Remove="Resources\Images\switchon.png" />
+	  <None Remove="Resources\Images\switchprofileIconnew.png" />
+	  <None Remove="Resources\Images\Symptom.png" />
+	  <None Remove="Resources\Images\tile_circle.png" />
+	  <None Remove="Resources\Images\updateImage.png" />
+	  <None Remove="Resources\Images\user.png" />
+	  <None Remove="Resources\Images\Vitalsigns.png" />
+	  <None Remove="Resources\Images\vsbackground.png" />
+	  <None Remove="Resources\Images\wallet_connection.png" />
+	  <None Remove="Resources\Images\watchIcon.png" />
+	  <None Remove="Resources\Images\worried.png" />
+	  <None Remove="Resources\raw\Android_New_03_Looping Beat_Halza.json" />
+	  <None Remove="Resources\Raw\delete.html" />
+	  <None Remove="Resources\raw\dotnetbot.json" />
+	  <None Remove="Resources\Splash\splashscreen.png" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AndroidResource Include="Platforms\Android\xml\file_paths.xml" />
+	</ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="Platforms\iOS\GoogleService-Info.plist" Link="GoogleService-Info.plist" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Contents.json" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-152.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-20.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60%402x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60%403x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-60.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-76.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-83.5%402x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small%402x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small%403x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-small-40%403x.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small-40.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\Icon-Small.png" />
+	  <Content Include="Platforms\iOS\Media.xcassets\AppIcons.appiconset\iTunesArtwork.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="banditoth.MAUI.DeviceId" Version="1.0.0" />
+		<PackageReference Include="banditoth.MAUI.Multilanguage" Version="1.0.5" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="DLToolkit.Maui.Controls.FlowListView" Version="1.0.0" />
+		<PackageReference Include="FFImageLoading.Maui" Version="1.2.5" />
+		<PackageReference Include="Flurl" Version="4.0.0" />
+		<PackageReference Include="HorusStudio.Maui.Skeleton" Version="2.0.0" />
+		<PackageReference Include="libphonenumber-csharp" Version="8.13.39" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.41.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
+			<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70">
+				<TreatAsUsed>true</TreatAsUsed>
+			</PackageReference>
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.60" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
+		<PackageReference Include="MonkeyCache.FileStore" Version="2.1.1" />
+		<PackageReference Include="Mopups" Version="1.3.1" />
+		<PackageReference Include="NewRelic.Agent.Api" Version="10.29.0" />
+		<PackageReference Include="NewRelic.MAUI.Plugin" Version="0.0.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="PancakeViewCompat" Version="7.0.0" />
+		<PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
+		<PackageReference Include="Plugin.LocalNotification" Version="11.1.3" />
+		<PackageReference Include="Plugin.Multilingual" Version="1.1.6-beta" />
+		<PackageReference Include="Plugin.Permissions" Version="6.0.1" />
+		<PackageReference Include="Prism.DryIoc.Maui" Version="9.0.401-pre" />
+		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+		<PackageReference Include="RestSharp" Version="106.12.0" />
+		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.2" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="24.2.6" />
+
+		<PackageReference Include="Syncfusion.Maui.Core" Version="24.2.9" />
+
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="24.2.6" />
+		<PackageReference Include="Syncfusion.Maui.NavigationDrawer" Version="24.2.6" />
+		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="24.2.6" />
+		<PackageReference Include="Syncfusion.Maui.Picker" Version="24.2.6" />
+		<PackageReference Include="Syncfusion.Maui.ProgressBar" Version="24.2.6" />
+		<PackageReference Include="Syncfusion.Maui.TabView" Version="24.2.6" />
+		<PackageReference Include="Xam.Plugin.FilePicker" Version="1.1.0" />
+		<PackageReference Include="Xam.Plugin.Media" Version="6.0.2" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.4.0" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CosmosStorageSDK.Module\CosmosStorageSDK.Module\CosmosStorageSDK.Module.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Components\AccordionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\ArchivedMedicineTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\BottomNavigationBar\BottomNavigationBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\BottomNavigationBar\NavigationBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomChartPointToolTipGrowthBook.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomCheckBox.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomFilePicker.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomFrameTile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomNavigationBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomPageNew.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomProfileHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomProfileSettingsHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CustomToolbarItem.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\FAB\FloatingActionButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\FAB\ShortCutsFAB.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\MedicineAndroidPlatformTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\MedicineiOSPlatformTemplate.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Accounts\ConfirmationPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Accounts\DeleteAccount\DeleteAccount.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Accounts\FriendProfile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Accounts\LanguageSelection.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Accounts\MyUserProfile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\Allergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\AllergiesPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Appointments\AppointmentWebview.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ConnectionChecking\NoInternetConnectionPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dashboard\Dashboard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dental\DentalNotes.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dental\DicomDentalViewer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dental\ImageDentalRecordViewer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dental\PdfDentalRecordViewer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DrSearch\DrSearchWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DrSearch\VisualizationPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EmojiBlast\EBPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ExternalLink\ExternalLinkPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Feed\FeedsWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ExternalLink\Friendship\FriendsAndCircleWebPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ForceUpdate\ForceUpdatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Growthbook\FriendGrowthBook.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Growthbook\GrowthbookWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Growthbook\ReferenceForGrowthChart.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthConditions\DeleteConditionsPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthConditions\HealthConditionsList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthConditions\HealthConditionsPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthParameters\AddVitalsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthParameters\GraphViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthParameters\HealthParametersList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthParameters\SelectionPopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HealthParameters\VitalSignTags.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IntermittentFasting\IFViewer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IntroductionWebview\ChangeLanguageWebview.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IVF\IVFWebView\IVFWebViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IVF\Medications\IVFMedications.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\IVF\Questionnaire\QuestionnaireWebViewerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\JohnHopkins\JoinJohnHopkinsWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\KidsSignUp\AuthorizationEmailSentPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\KidsSignUp\ConsentPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Language\SelectLanguage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoadingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\AddMedicalCase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\AddMedicalCaseRecord.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\DeleteFoldersPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\EditMedicalCaseName.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\EditMedicalCaseRecord.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MedicalCaseRecordsList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MedicalCasesList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MedicalDeletePopUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MedicalViewerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MedicalViewerPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\MovingFilesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\SelectRecordType.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\SortPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MedicalRecords\VaccineWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\AddMedicine.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\AddNewMedicinePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\ConfirmationPopupHistoryMedicine.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\DeleteConfirmationPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\DuplicateConfirmationPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\EditMedicine.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\GetMedicineList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\MedicineWeb\MedicineWebview.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Medicines\SetMedicineReminder.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\AddFamilyMemberAndProfile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\MemberDetails\MemberAccessDetails.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\MemberDetails\UpgradeMemberPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\MyFamily.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\RemoveLeaveFamilyMember\LeaveFamilyConfirmationPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\RemoveLeaveFamilyMember\RemoveFamilyConfirmationPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\ResendInvite\ResentConfirmEmailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyFamily\WebViewComponent\MyFamilyPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\OnboardingPage\OnboardingWebPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\OrganDonation\AddHepatitisType.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\OrganDonation\AddTransplants.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\OrganDonation\EditOrganDonation.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\PeriodTracker\PeriodTrackerWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Contractions\ContractionsLandingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Contractions\ContractionsTimerNotificationPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Contractions\LaborContractionsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Contractions\TimerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Contractions\TimerUsePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Journals\JounalsWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Moods\MoodsWebPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\PregnancyWebView\PregnancyWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pregnancy\Symptoms\SymptomsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProjectPlus\EditShortcuts.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProjectPlus\PopUpErrorMessage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProjectPlus\ShortCutsLandingPagePopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Proxy\ProxyDetails.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Proxy\RemoveProxy.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Proxy\SelectProxy.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Proxy\SelectVerifyingParty.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Proxy\VerifyingPartyDetails.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\QRScanner\QRMessgaePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\QRScanner\QRScannerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Quickshare\QSWebView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Reminders\AddHealthReminder.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Reminders\EditHealthReminder.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Reminders\PopUpHealthReminder.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+		<MauiXaml Update="Views\Reminders\RemindersWebView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\FamilySubscriptionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\IVFSubscriptionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\PregnancySubscriptionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\QuickShareSubscriptionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\RecordsSubscriptionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Subscription\SubscriptionWebView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Support\AboutWebView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Support\FAQ.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Support\Help.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Support\HelpEmail.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	    <MauiXaml Update="Views\Support\RateApp.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Support\TermsAndPolicies.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Web3\WalletPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splashscreen.png" Resize="True" BaseSize="300,300" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\delete.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiAsset>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Platforms\iOS\Entitlements.plist">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android34.0'">
+		   <PackageReference Include="Xamarin.AndroidX.Collection.Jvm">
+			<Version>1.4.2.1</Version>
+		</PackageReference>
+		
+		<PackageReference Include="Xamarin.AndroidX.Collection.Ktx">
+			<Version>1.4.2.1</Version>
+		</PackageReference>
+		<PackageReference Include="Xamarin.Firebase.Messaging">
+			<Version>123.4.1.1</Version>
+		</PackageReference>
+		
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android34.0'">
+  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+</ItemGroup>
+	
+</Project>
